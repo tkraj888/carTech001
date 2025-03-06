@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function HowItWorks() {
-  return (
-    <div
-      className="relative bg-cover bg-center"
-      style={{ backgroundImage: "url('/cove.jpg')" }} 
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-60" />
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    // Check screen width on mount and update on resize
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const backgroundStyle = {
+    backgroundImage: "url('/cove.jpg')",
+    backgroundSize: isMobile ? "100% 100%" : "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  };
+
+  return (
+    <div className="relative" style={backgroundStyle}>
+      <div className="absolute inset-0 bg-black bg-opacity-60" />
       <div className="relative container mx-auto py-20 px-4 text-white text-center">
         <h2 className="text-4xl font-bold mb-4">How It Works</h2>
         <p className="text-xl mb-12">
@@ -15,7 +28,6 @@ function HowItWorks() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-  
           <div className="bg-black bg-opacity-80 rounded-lg p-10 hover:shadow-xl transition transform hover:-translate-y-2">
             <div className="text-5xl font-bold mb-4">01</div>
             <h3 className="text-2xl font-semibold mb-2">Choose</h3>
@@ -24,7 +36,6 @@ function HowItWorks() {
             </p>
           </div>
 
-    
           <div className="bg-black bg-opacity-80 rounded-lg p-10 hover:shadow-xl transition transform hover:-translate-y-2">
             <div className="text-5xl font-bold mb-4">02</div>
             <h3 className="text-2xl font-semibold mb-2">Book</h3>
