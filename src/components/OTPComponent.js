@@ -12,14 +12,14 @@ import Typography from "@mui/material/Typography";
 import { VerifyEmailOtp } from "../Services/userService";
 export default function OTPComponent({ open, handleClose, email, isVerifySuccess }) {
     const [otp, setOtp] = React.useState(Array(6).fill(""));
-    const [timer, setTimer] = React.useState(120); // 2 minutes
+    const [timer, setTimer] = React.useState(120); 
     const [resendDisabled, setResendDisabled] = React.useState(true);
     const inputRefs = React.useRef(new Array(6).fill(null));
     const [loading, setLoading] = React.useState(false);
     const handleVerifyOTP = async () => {
         try {
             setLoading(true);
-            const otpCode = otp.join(""); // Convert array to string
+            const otpCode = otp.join("");
             const data = {
                 email: email,
                 otp: otpCode
@@ -42,26 +42,26 @@ export default function OTPComponent({ open, handleClose, email, isVerifySuccess
             setLoading(false);
         }
     };
-    // Handle OTP input change
+    
     const handleChange = (index, event) => {
         const value = event.target.value;
         if (!/^\d*$/.test(value))
-            return; // Allow only numbers
+            return; 
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
-        // Move to the next input field automatically
+     
         if (value && index < 5) {
             inputRefs.current[index + 1]?.focus();
         }
     };
-    // Handle backspace functionality
+   
     const handleKeyDown = (index, event) => {
         if (event.key === "Backspace" && !otp[index] && index > 0) {
             inputRefs.current[index - 1]?.focus();
         }
     };
-    // Start Timer
+    
     React.useEffect(() => {
         if (timer > 0) {
             const interval = setInterval(() => {
@@ -73,24 +73,24 @@ export default function OTPComponent({ open, handleClose, email, isVerifySuccess
             setResendDisabled(false);
         }
         if (open) {
-            setTimer(120); // Reset timer when the component is opened
+            setTimer(120); 
             const timer = setInterval(() => {
                 setTimer((prev) => {
                     if (prev === 1)
-                        clearInterval(timer); // Stop timer at 0
+                        clearInterval(timer); 
                     return prev - 1;
                 });
             }, 1000);
-            return () => clearInterval(timer); // Cleanup on unmount
+            return () => clearInterval(timer); 
         }
     }, [open, timer]);
-    // Resend OTP
+
     const handleResend = () => {
-        setTimer(120); // Reset timer to 2 minutes
+        setTimer(120); 
         setResendDisabled(true);
-        setOtp(Array(6).fill("")); // Clear OTP fields
+        setOtp(Array(6).fill("")); 
         inputRefs.current[0]?.focus();
-        // Here you can add your resend OTP API call
+      
     };
     return (_jsxs(Dialog, { open: open, onClose: handleClose, slotProps: {
             paper: {
@@ -98,7 +98,7 @@ export default function OTPComponent({ open, handleClose, email, isVerifySuccess
                 onSubmit: (event) => {
                     event.preventDefault();
                     handleVerifyOTP();
-                    // handleClose();
+                  
                 },
                 sx: { backgroundImage: "none" },
             },

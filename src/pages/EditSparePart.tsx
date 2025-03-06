@@ -225,7 +225,7 @@ function EditSparePart() {
       </button>
 
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
-        {/* Images Section */}
+
         <div className="bg-white p-6 md:p-8 shadow-lg rounded-lg border border-gray-100 flex-1">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Photos</h2>
 

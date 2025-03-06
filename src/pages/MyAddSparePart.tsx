@@ -73,7 +73,6 @@ function MyAddSparePart() {
       console.error("Submission error:", error);
       let errorMessage = "Failed to add spare part. Please try again.";
 
-      // Use axios.isAxiosError to check if error is an AxiosError
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.exception ||
                        error.response?.data?.message ||
@@ -94,7 +93,7 @@ function MyAddSparePart() {
     if (!e.target.files) return;
     
     const files = Array.from(e.target.files);
-    // Reset upload error state as soon as files are selected
+
     if (files.length > 0) {
       setUploadError(false);
     }
@@ -136,7 +135,7 @@ function MyAddSparePart() {
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Part Name */}
+         
               <div className="space-y-2">
                 <label className="flex items-center text-gray-700 font-medium gap-2">
                   <Tag className="h-5 w-5 text-blue-600" />
@@ -153,7 +152,6 @@ function MyAddSparePart() {
                 />
               </div>
 
-              {/* Manufacturer */}
               <div className="space-y-2">
                 <label className="flex items-center text-gray-700 font-medium gap-2">
                   <Factory className="h-5 w-5 text-blue-600" />
@@ -170,7 +168,6 @@ function MyAddSparePart() {
                 />
               </div>
 
-              {/* Price */}
               <div className="space-y-2">
                 <label className="flex items-center text-gray-700 font-medium gap-2">
                   <span className="text-blue-600">₹</span>
@@ -188,7 +185,6 @@ function MyAddSparePart() {
                 />
               </div>
 
-              {/* Part Number */}
               <div className="space-y-2">
                 <label className="flex items-center text-gray-700 font-medium gap-2">
                   <Hash className="h-5 w-5 text-blue-600" />
@@ -206,7 +202,6 @@ function MyAddSparePart() {
               </div>
             </div>
 
-            {/* Description */}
             <div className="space-y-2">
               <label className="flex items-center text-gray-700 font-medium gap-2">
                 <Info className="h-5 w-5 text-blue-600" />
@@ -223,7 +218,6 @@ function MyAddSparePart() {
               />
             </div>
 
-            {/* Image Upload */}
             <div className="space-y-2">
               <label className="flex items-center text-gray-700 font-medium gap-2">
                 <UploadCloud className="h-5 w-5 text-blue-600" />
@@ -283,7 +277,6 @@ function MyAddSparePart() {
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-3.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-2"

@@ -56,7 +56,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               m: 'auto',
             }}
           >
-            {/* <Content /> */}
             <SignUpCard />
           </Stack>
         </Stack>

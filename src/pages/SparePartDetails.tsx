@@ -160,7 +160,6 @@ function SparePartDetails() {
                 ))}
             </motion.div>
 
-            {/* Main Image */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -192,7 +191,6 @@ function SparePartDetails() {
             </motion.div>
           </div>
 
-          {/* Delivery Message */}
           {deliveryMessage && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -205,7 +203,6 @@ function SparePartDetails() {
           )}
         </div>
 
-        {/* Details Section */}
         <div className="w-full lg:w-1/2">
           <div className="flex items-center justify-between mb-4">
             <motion.h1
@@ -316,7 +313,6 @@ function SparePartDetails() {
         </div>
       </div>
 
-      {/* Full Screen Image Modal */}
       <AnimatePresence>
         {isFullScreen && (
           <motion.div
@@ -351,7 +347,6 @@ function SparePartDetails() {
         )}
       </AnimatePresence>
 
-      {/* Pincode Popup */}
       <AnimatePresence>
         {showPincodePopup && (
           <motion.div

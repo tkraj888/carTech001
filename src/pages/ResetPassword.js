@@ -39,7 +39,7 @@ export default function ResetPassword(props) {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
     if (!token) {
-        return _jsx("p", { children: "Invalid or missing token." }); // Handle missing token
+        return _jsx("p", { children: "Invalid or missing token." }); 
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -56,7 +56,7 @@ export default function ResetPassword(props) {
             if (response.code == 200) {
                 console.log("Password reset successful:", response);
                 alert("Password reset successful!");
-                navigate("/signIn"); // Redirect to dashboard after login
+                navigate("/signIn"); 
             }
             else {
                 alert("Password reset failed!. Please try again.");
@@ -71,7 +71,7 @@ export default function ResetPassword(props) {
         const newPassword = document.getElementById('newPassword');
         const confirmPassword = document.getElementById('confirmPassword');
         let isValid = true;
-        // Check if passwords are empty or less than 6 characters
+
         if (!newPassword.value || newPassword.value.length < 6) {
             setNewPasswordError(true);
             setNewPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -90,7 +90,7 @@ export default function ResetPassword(props) {
             setConfirmPasswordError(false);
             setConfirmPasswordErrorMessage('');
         }
-        // Check if passwords match
+ 
         if (newPassword.value !== confirmPassword.value) {
             setConfirmPasswordError(true);
             setConfirmPasswordErrorMessage('Passwords do not match.');

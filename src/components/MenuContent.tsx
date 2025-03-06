@@ -14,8 +14,8 @@ import {
   AnalyticsRounded as AnalyticsIcon,
   PeopleRounded as PeopleIcon,
   AssignmentRounded as AssignmentIcon,
-  BuildRounded as BuildIcon, // Service Icon
-  MiscellaneousServicesRounded as RepairIcon, // Repair Icon
+  BuildRounded as BuildIcon, 
+  MiscellaneousServicesRounded as RepairIcon, 
   ExpandLess,
   ExpandMore,
 } from "@mui/icons-material";
@@ -60,11 +60,11 @@ const mainListItems = [
 ];
 
 export default function MenuContent() {
-  const location = useLocation(); // Get current route
+  const location = useLocation(); 
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);;
   
   const handleToggle = (menuText: string) => {
-    setOpenSubMenu((prev) => (prev === menuText ? null : menuText)); // Close others
+    setOpenSubMenu((prev) => (prev === menuText ? null : menuText)); 
   };
 
   return (
@@ -72,7 +72,7 @@ export default function MenuContent() {
       <List dense>
         {mainListItems.map((item, index) => (
           <React.Fragment key={index}>
-            {/* Normal Menu Item */}
+        
             {!item.subMenu ? (
               <ListItem disablePadding sx={{ display: "block" }}>
                 <NavLink
@@ -86,7 +86,7 @@ export default function MenuContent() {
                 </NavLink>
               </ListItem>
             ) : (
-              // Parent Item with Submenu
+             
               <>
                 <ListItem disablePadding sx={{ display: "block" }}>
                   <ListItemButton onClick={() => item.subMenu && handleToggle(item.text)}>
@@ -96,7 +96,7 @@ export default function MenuContent() {
                   </ListItemButton>
                 </ListItem>
 
-                {/* Submenu Items */}
+            
                 <Collapse in={openSubMenu === item.text} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {item.subMenu.map((subItem, subIndex) => (
@@ -110,7 +110,7 @@ export default function MenuContent() {
                           }}
                         >
                           <ListItemButton selected={location.pathname === subItem.link}>
-                            {/* <ListItemIcon>{subItem.icon}</ListItemIcon> */}
+                           
                             <ListItemText primary={subItem.text} />
                           </ListItemButton>
                         </NavLink>

@@ -23,7 +23,6 @@ function Home() {
     },
   };
 
-  // Continuous bounce effect
   const continuousBounce = {
     scale: [1, 1.05, 1],
     transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },

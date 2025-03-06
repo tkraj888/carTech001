@@ -50,30 +50,26 @@ export default function OTPComponent({ open, handleClose, email ,isVerifySuccess
     }
   };
 
-  // Handle OTP input change
   const handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value;
-    if (!/^\d*$/.test(value)) return; // Allow only numbers
+    if (!/^\d*$/.test(value)) return; 
   
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-  
-    // Move to the next input field automatically
+ 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
   
 
-  // Handle backspace functionality
   const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (event.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
-  
-  // Start Timer
+
   React.useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -85,27 +81,27 @@ export default function OTPComponent({ open, handleClose, email ,isVerifySuccess
     }
 
     if (open) {
-        setTimer(120); // Reset timer when the component is opened
+        setTimer(120); 
   
         const timer = setInterval(() => {
             setTimer((prev) => {
-            if (prev === 1) clearInterval(timer); // Stop timer at 0
+            if (prev === 1) clearInterval(timer); 
             return prev - 1;
           });
         }, 1000);
   
-        return () => clearInterval(timer); // Cleanup on unmount
+        return () => clearInterval(timer); 
       }
   }, [open ,timer]);
 
 
-  // Resend OTP
+
   const handleResend = () => {
-    setTimer(120); // Reset timer to 2 minutes
+    setTimer(120); 
     setResendDisabled(true);
-    setOtp(Array(6).fill("")); // Clear OTP fields
+    setOtp(Array(6).fill("")); 
     inputRefs.current[0]?.focus();
-    // Here you can add your resend OTP API call
+    
   };
 
   return (
@@ -118,7 +114,7 @@ export default function OTPComponent({ open, handleClose, email ,isVerifySuccess
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             handleVerifyOTP();
-            // handleClose();
+            
           },
           sx: { backgroundImage: "none" },
         },
@@ -130,7 +126,6 @@ export default function OTPComponent({ open, handleClose, email ,isVerifySuccess
           A verification mail has been sent to your registered email. Please check your inbox and enter the 6-digit OTP to proceed.
         </DialogContentText>
 
-        {/* OTP Input Fields */}
         <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
           {otp.map((digit, index) => (
             <OutlinedInput
@@ -149,7 +144,6 @@ export default function OTPComponent({ open, handleClose, email ,isVerifySuccess
           ))}
         </Box>
 
-        {/* Timer & Resend OTP */}
         <Typography sx={{ textAlign: "center", mt: 2 }}>
           {resendDisabled ? `Resend OTP in ${Math.floor(timer / 60)}:${(timer % 60).toString().padStart(2, "0")}` : (
             <Button onClick={handleResend} disabled={resendDisabled}>

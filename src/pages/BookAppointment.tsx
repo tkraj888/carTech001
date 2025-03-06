@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios";
+import apiClient from "Services/apiService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CheckCircle, XCircle } from "lucide-react"; // Icons for Do's and Don'ts
+import { CheckCircle, XCircle } from "lucide-react"; 
 
 function BookAppointment() {
   const navigate = useNavigate();
@@ -25,24 +25,24 @@ function BookAppointment() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // For custom success modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false); 
 
-  // Handle date change
   const handleDateChange = (date: Date | null) => {
-    setFormData({ ...formData, appointmentDate: date ? date.toISOString() : ""  });
+    setFormData({ ...formData, appointmentDate: date ? date.toISOString() : "" });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Add current time to the appointment date
     const now = new Date();
     const appointmentDateTime = new Date(formData.appointmentDate);
     appointmentDateTime.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
@@ -53,12 +53,9 @@ function BookAppointment() {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/appointments/add",
-        payload
-      );
+      const response = await apiClient.post("/appointments/add", payload);
       if (response.status === 200) {
-        setShowSuccessModal(true); // Show custom success modal
+        setShowSuccessModal(true); 
       }
     } catch (err) {
       setError("Failed to book appointment. Please try again.");
@@ -68,10 +65,9 @@ function BookAppointment() {
     }
   };
 
-  // Close success modal
   const closeSuccessModal = () => {
     setShowSuccessModal(false);
-    navigate("/"); // Redirect to home page
+    navigate("/"); 
   };
 
   return (
@@ -82,13 +78,11 @@ function BookAppointment() {
         transition={{ duration: 0.5 }}
         className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
-        {/* Appointment Form */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 sm:p-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 text-center">
             Book Your Appointment
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Customer Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Customer Name
@@ -103,7 +97,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Mobile Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Mobile Number
@@ -118,7 +111,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Vehicle Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Vehicle Number
@@ -133,7 +125,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Vehicle Maker */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Vehicle Maker
@@ -148,7 +139,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Vehicle Model */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Vehicle Model
@@ -163,7 +153,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Manufactured Year */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Manufactured Year
@@ -178,7 +167,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Kilometer Driven */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Kilometer Driven
@@ -193,7 +181,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Fuel Type */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Fuel Type
@@ -214,7 +201,6 @@ function BookAppointment() {
               </select>
             </div>
 
-            {/* Work Type */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Work Type
@@ -229,7 +215,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Vehicle Problem */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Vehicle Problem
@@ -238,12 +223,10 @@ function BookAppointment() {
                 name="vehicleProblem"
                 value={formData.vehicleProblem}
                 onChange={handleChange}
-                // rows="4"
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white text-gray-700"
               ></textarea>
             </div>
 
-            {/* Pickup and Drop Service */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Pickup and Drop Service
@@ -260,7 +243,6 @@ function BookAppointment() {
               </select>
             </div>
 
-            {/* User ID */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 User ID
@@ -275,13 +257,14 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Appointment Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Appointment Date
               </label>
               <DatePicker
-                selected={formData.appointmentDate ? new Date(formData.appointmentDate) : null}
+                selected={
+                  formData.appointmentDate ? new Date(formData.appointmentDate) : null
+                }
                 onChange={handleDateChange}
                 dateFormat="yyyy-MM-dd"
                 minDate={new Date()}
@@ -290,7 +273,6 @@ function BookAppointment() {
               />
             </div>
 
-            {/* Submit Button with Animation */}
             <div className="flex justify-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -327,13 +309,11 @@ function BookAppointment() {
           </form>
         </div>
 
-        {/* Do's and Don'ts Section */}
         <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">
             Vehicle Servicing Tips
           </h3>
           <div className="space-y-6">
-            {/* Do's */}
             <div>
               <h4 className="text-lg font-semibold text-green-600 mb-2 flex items-center">
                 <CheckCircle className="w-5 h-5 mr-2" /> Do's
@@ -345,8 +325,6 @@ function BookAppointment() {
                 <li>Carry your vehicle's service history if available.</li>
               </ul>
             </div>
-
-            {/* Don'ts */}
             <div>
               <h4 className="text-lg font-semibold text-red-600 mb-2 flex items-center">
                 <XCircle className="w-5 h-5 mr-2" /> Don'ts
@@ -362,7 +340,6 @@ function BookAppointment() {
         </div>
       </motion.div>
 
-      {/* Custom Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <motion.div

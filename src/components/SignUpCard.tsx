@@ -42,7 +42,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
-//   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+
   minHeight: '100%',
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
@@ -151,14 +151,14 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Always prevent default submission
+    event.preventDefault(); 
   
     if (nameError || emailError || passwordError || lNameError || addressError || mobileNoError) {
-      return; // Stop form submission if errors exist
+      return; 
     }
   
     try {
-      // Get form data using event.currentTarget
+    
       const formData = {
         fname: (event.currentTarget.elements.namedItem("fname") as HTMLInputElement)?.value,
         lname: (event.currentTarget.elements.namedItem("lname") as HTMLInputElement)?.value,
@@ -209,7 +209,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address.');
-      return; // Stop execution if email is invalid
+      return; 
     } else {
       setEmail(email.value);
       setEmailError(false);
@@ -224,20 +224,19 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     setOtpClosed(false)
   }
   const handleVerifySuccess = () => {
-    setIsVerify(true); // ✅ Set to true when OTP is verified
-    setOtpClosed(false); // ✅ Close OTP dialog
+    setIsVerify(true); 
+    setOtpClosed(false); 
   };
 
   return (
     <AppTheme {...props}>
-      {/* <CssBaseline enableColorScheme /> */}
-      {/* <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} /> */}
+    
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <RouterLink to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}>
             <ArrowBack sx={{ mr: 1 }} /> Car Auto Care
           </RouterLink>
-          {/* <SitemarkIcon /> */}
+ 
           <Typography
             component="h1"
             variant="h4"
@@ -309,7 +308,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             </FormControl>
             <Link
                 component={Button}
-                onClick={isVerify ? undefined : handleOpen} // ✅ Correct
+                onClick={isVerify ? undefined : handleOpen} 
                 variant="body2"
                 sx={{ alignSelf: "center" }}
               >

@@ -43,7 +43,7 @@ export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
   const token = searchParams.get("token");
 
   if (!token) {
-    return <p>Invalid or missing token.</p>; // Handle missing token
+    return <p>Invalid or missing token.</p>; 
   }
 
 
@@ -65,7 +65,7 @@ export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
        if (response.code == 200) {
         console.log("Password reset successful:", response);
         alert("Password reset successful!");
-        navigate("/signIn"); // Redirect to dashboard after login
+        navigate("/signIn"); 
       } else {
         alert("Password reset failed!. Please try again.");
       }
@@ -82,7 +82,6 @@ export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
   
     let isValid = true;
   
-    // Check if passwords are empty or less than 6 characters
     if (!newPassword.value || newPassword.value.length < 6) {
       setNewPasswordError(true);
       setNewPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -101,7 +100,6 @@ export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
       setConfirmPasswordErrorMessage('');
     }
   
-    // Check if passwords match
     if (newPassword.value !== confirmPassword.value) {
       setConfirmPasswordError(true);
       setConfirmPasswordErrorMessage('Passwords do not match.');
@@ -162,7 +160,7 @@ export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
           >
         <Card variant="outlined">
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            {/* <SitemarkIcon /> */}
+ 
         </Box>
         <Typography
             component="h1"

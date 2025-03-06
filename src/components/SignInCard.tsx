@@ -17,7 +17,7 @@ import { ArrowBack } from "@mui/icons-material";
 interface MyJwtPayload extends JwtPayload {
   authorities: string[];
   roles: string[];
-  // Add other custom fields as needed
+ 
 }
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -113,11 +113,10 @@ export default function SignInCard() {
 
   return (
     <>
-  {/* Back to Page Button - Placed Outside the Card */}
+
  
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex',  } }}>
-        {/* <SitemarkIcon /> */}
         <RouterLink to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}>
   <ArrowBack sx={{ mr: 1 }} /> Car Auto Care
 </RouterLink>

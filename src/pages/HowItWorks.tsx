@@ -4,7 +4,6 @@ function HowItWorks() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check screen width on mount and update on resize
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);

@@ -32,7 +32,7 @@ export default function AdminHeader(props: { disableCustomTheme?: boolean }) {
       <Box sx={{ display: 'flex' }}>
         <SideMenu />
         <AppNavbar />
-        {/* Main content */}
+
         <Box
           component="main"
           sx={(theme) => ({
@@ -54,7 +54,6 @@ export default function AdminHeader(props: { disableCustomTheme?: boolean }) {
           >
             <Header />
             <Outlet />
-            {/* <MainGrid /> */}
           </Stack>
         </Box>
       </Box>
