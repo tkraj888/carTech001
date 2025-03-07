@@ -13,6 +13,7 @@ import SparePart from "pages/SparePart";
 import EditSparePart from "pages/EditSparePart";
 import BookAppointment from "pages/BookAppointment";
 import SparePartDetails from "pages/SparePartDetails";
+import VehicleRegistration from "pages/VehicleRegistraction";
 
 const AppRoutes = () => {
     return(
@@ -30,6 +31,7 @@ const AppRoutes = () => {
             <Route path="/spare-part/:id" element={<SparePartDetails />} /> 
             <Route path="/book-service" element={<BookAppointment />} /> 
             <Route path="/edit-spare-part/:id" element={<EditSparePart />} />
+            <Route path="/vehicle-registration" element={<VehicleRegistration />} />
 
             </Route>
             <Route path="/admin/*" element={<AdminHeader />}>

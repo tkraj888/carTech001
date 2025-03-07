@@ -132,6 +132,19 @@ const WebHeader = () => {
                       <span className="absolute bottom-0 left-0 w-0.5 h-0 bg-white transition-all duration-300 group-hover:h-full delay-300"></span>
                     </span>
                   </Link>
+
+                  <Link
+                    to="/vehicle-registration"
+                    className="group relative text-white px-4 py-3 lg:py-2 transition-all duration-300 hover:bg-gray-700 lg:hover:bg-transparent"
+                  >
+                    Vehicle Registration
+                    <span className="absolute inset-0">
+                      <span className="absolute top-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute top-0 right-0 w-0.5 h-0 bg-white transition-all duration-300 group-hover:h-full delay-100"></span>
+                      <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full delay-200"></span>
+                      <span className="absolute bottom-0 left-0 w-0.5 h-0 bg-white transition-all duration-300 group-hover:h-full delay-300"></span>
+                    </span>
+                  </Link>
                 </>
               )}
             </div>
