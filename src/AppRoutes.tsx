@@ -14,7 +14,11 @@ import EditSparePart from "pages/EditSparePart";
 import BookAppointment from "pages/BookAppointment";
 import SparePartDetails from "pages/SparePartDetails";
 import VehicleRegistration from "pages/VehicleRegistraction";
-
+import VehicleReg from 'pages/vehiclereg';
+import VehicleById from 'pages/VehicleById';
+import VehicleByDate from 'pages/vechiclebydate';
+import Vehiclestatus from 'pages/vechiclestatus';
+import VehicleByAppointmentId from 'pages/VehicleByAppointmentId';
 const AppRoutes = () => {
     return(
         <>
@@ -32,7 +36,12 @@ const AppRoutes = () => {
             <Route path="/book-service" element={<BookAppointment />} /> 
             <Route path="/edit-spare-part/:id" element={<EditSparePart />} />
             <Route path="/vehicle-registration" element={<VehicleRegistration />} />
-
+            <Route path="/vehicle-regi" element={<VehicleReg />} />
+            <Route path="/vehicle-by-id" element={<VehicleById />} />
+            <Route path="/vehicle-by-date-range" element={<VehicleByDate />} />
+            <Route path="/Vehiclestatus" element={<Vehiclestatus />} />
+            <Route path="/VehicleByAppointmentId" element={<VehicleByAppointmentId />} />
+            
             </Route>
             <Route path="/admin/*" element={<AdminHeader />}>
                 <Route path="dashboard" element={<Dashboard />} />

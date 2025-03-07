@@ -1,145 +1,157 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
-interface VehicleRegistrationData {
-    appointmentId: number;
-    chasisNumber: string;
-    customerAddress: string;
-    customerAadharNo: string;
-    customerGstin: string;
-    supervisor: string;
-    technician: string;
-    worker: string;
-    status: string;
-    userId: number;
-    date: string;
+interface Vehicle {
+  vehicleRegId: number;
+  appointmentId: number;
+  chasisNumber: string;
+  customerAddress: string;
+  customerAadharNo: string;
+  customerGstin: string;
+  superwiser: string;
+  technician: string;
+  worker: string;
+  status: string;
+  userId: number;
+  date: string;
 }
 
-const VehicleRegistrationForm: React.FC = () => {
-    const [formData, setFormData] = useState<VehicleRegistrationData>({
-        appointmentId: 0,
-        chasisNumber: '',
-        customerAddress: '',
-        customerAadharNo: '',
-        customerGstin: '',
-        supervisor: '',
-        technician: '',
-        worker: '',
-        status: 'in process',
-        userId: 0,
-        date: ''
-    });
-
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [vehicleData, setVehicleData] = useState<VehicleRegistrationData[]>([]);
-
-    useEffect(() => {
-        const fetchAllVehicleData = async () => {
-            try {
-                const response = await fetch('https://carauto01-production-8b0b.up.railway.app/vehicle-reg/getAll');
-                const data = await response.json();
-                setVehicleData(Array.isArray(data) ? data : []);
-            } catch (error) {
-                console.error('Error fetching all vehicle data:', error);
-                alert('Failed to fetch all vehicle data');
-            }
-        };
-
-        fetchAllVehicleData();
-    }, []);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-
-        if (value.trim() === '') {
-            setErrors({ ...errors, [name]: 'This field is required' });
-        } else {
-            const { [name]: removed, ...rest } = errors;
-            setErrors(rest);
-        }
-
-        if (name === 'customerAadharNo' && !/^[0-9]{12}$/.test(value)) {
-            setErrors({ ...errors, customerAadharNo: 'Aadhar number must be exactly 12 digits' });
-        } else {
-            const { customerAadharNo, ...rest } = errors;
-            setErrors(rest);
-        }
-
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const newErrors: { [key: string]: string } = {};
-        Object.keys(formData).forEach(key => {
-            if (!formData[key as keyof VehicleRegistrationData].toString().trim()) {
-                newErrors[key] = 'This field is required';
-            }
-        });
-
-        if (Object.keys(newErrors).length > 0 || errors.customerAadharNo) {
-            setErrors({ ...errors, ...newErrors });
-            alert('Please fix the errors before submitting.');
-            return;
-        }
-
-        try {
-            const response = await fetch('https://carauto01-production-8b0b.up.railway.app/vehicle-reg/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            const result = await response.json();
-            alert('Form submitted successfully!');
-            console.log('Form submitted successfully:', result);
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('Failed to submit form');
-        }
-    };
-
-    return (
-        <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8">
-            <h2 className="text-2xl font-bold text-center mb-6">Vehicle Registration Form</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {Object.keys(formData).map((key) => (
-                    <div key={key} className="flex flex-col">
-                        <label htmlFor={key} className="text-sm font-medium text-gray-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</label>
-                        {key === 'status' ? (
-                            <select
-                                id={key}
-                                name={key}
-                                value={formData.status}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                required
-                            >
-                                <option value="in process">In Process</option>
-                                <option value="complete">Complete</option>
-                                <option value="waiting">Waiting</option>
-                            </select>
-                        ) : (
-                            <input
-                                type="text"
-                                id={key}
-                                name={key}
-                                value={(formData as any)[key]}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                required
-                            />
-                        )}
-                        {errors[key] && (
-                            <span className="text-red-500 text-sm">{errors[key]}</span>
-                        )}
-                    </div>
-                ))}
-                <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Submit</button>
-            </form>
-        </div>
-    );
+const MenuBar = () => {
+  return (
+    <nav className="bg-blue-900 text-white py-4">
+      <ul className="flex justify-around">
+        <li><NavLink to="/vehicle-registration" className={({ isActive }) => isActive ? 'bg-blue-700 px-4 py-2 rounded-lg' : 'px-4 py-2'}>Vehicles</NavLink></li>
+        <li><NavLink to="/vehicle-regi" className="px-4 py-2">Vehicle Registration</NavLink></li>
+        <li><NavLink to="/vehicle-by-id" className="px-4 py-2"> Vehicle ID</NavLink></li>
+        <li><NavLink to="/vehicle-by-date-range" className="px-4 py-2">Vehicle Date Range</NavLink></li>
+        <li><NavLink to="/Vehiclestatus" className="px-4 py-2">Vehicle Status</NavLink></li>
+        <li><NavLink to="/VehicleByAppointmentId" className="px-4 py-2">Vehicle AppointmentId</NavLink></li>
+       </ul>
+    </nav>
+  );
 };
 
-export default VehicleRegistrationForm;
+const GetAllVehicles = () => {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+  useEffect(() => {
+    axios.get('https://carauto01-production-8b0b.up.railway.app/vehicle-reg/getAll')
+      .then(response => setVehicles(response.data.data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  const handleDelete = async (vehicleRegId: number) => {
+    try {
+      const response = await axios.delete(`https://carauto01-production-8b0b.up.railway.app/vehicle-reg/delete?vehicleRegId=${vehicleRegId}`);
+      if (response.status === 200) {
+        alert('Vehicle record deleted successfully!');
+        setVehicles(vehicles.filter(vehicle => vehicle.vehicleRegId !== vehicleRegId));
+      }
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      alert('Failed to delete vehicle record');
+    }
+  };
+
+  const handleEdit = async (vehicleRegId: number) => {
+    try {
+      const vehicleToUpdate = vehicles.find(vehicle => vehicle.vehicleRegId === vehicleRegId);
+      if (!vehicleToUpdate) {
+        alert('Vehicle not found!');
+        return;
+      }
+
+      const payload = {
+        vehicleRegId: vehicleToUpdate.vehicleRegId,
+        appointmentId: vehicleToUpdate.appointmentId,
+        chasisNumber: vehicleToUpdate.chasisNumber,
+        customerAddress: vehicleToUpdate.customerAddress,
+        customerAadharNo: vehicleToUpdate.customerAadharNo,
+        customerGstin: vehicleToUpdate.customerGstin,
+        superwiser: vehicleToUpdate.superwiser,
+        technician: vehicleToUpdate.technician,
+        worker: vehicleToUpdate.worker,
+        status: vehicleToUpdate.status,
+        userId: vehicleToUpdate.userId,
+        date: vehicleToUpdate.date
+      };
+
+      console.log('Sending vehicle data:', JSON.stringify(payload, null, 2));
+
+      const response = await axios.put(
+        `https://carauto01-production-8b0b.up.railway.app/vehicle-reg/update?vehicleRegId=${vehicleRegId}`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log('API Response:', response);
+
+      if (response.status === 200) {
+        alert('Vehicle record updated successfully!');
+      } else {
+        alert(`Failed to update vehicle record: ${response.statusText}`);
+      }
+    } catch (error: any) {
+      console.error('Full error response:', error.response);
+      console.error('Error details:', error.response ? error.response.data : error.message);
+      alert(`Failed to update vehicle record: ${error.response ? JSON.stringify(error.response.data) : error.message}`);
+    }
+  };
+
+  return (
+    <div>
+      <MenuBar />
+      <h2 className="text-center text-2xl font-bold text-black my-4">All Vehicles</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-md rounded-lg">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="py-2 px-4">Vehicle Reg ID</th>
+              <th className="py-2 px-4">Appointment ID</th>
+              <th className="py-2 px-4">Chasis Number</th>
+              <th className="py-2 px-4">Customer Address</th>
+              <th className="py-2 px-4">Customer Aadhar No</th>
+              <th className="py-2 px-4">Customer GSTIN</th>
+              <th className="py-2 px-4">Superwiser</th>
+              <th className="py-2 px-4">Technician</th>
+              <th className="py-2 px-4">Worker</th>
+              <th className="py-2 px-4">Status</th>
+              <th className="py-2 px-4">User ID</th>
+              <th className="py-2 px-4">Date</th>
+              <th className="py-2 px-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(vehicles) && vehicles.map(vehicle => (
+              <tr key={vehicle.vehicleRegId} className="border-t hover:bg-gray-100">
+                <td className="py-2 px-4">{vehicle.vehicleRegId}</td>
+                <td className="py-2 px-4">{vehicle.appointmentId}</td>
+                <td className="py-2 px-4">{vehicle.chasisNumber}</td>
+                <td className="py-2 px-4">{vehicle.customerAddress}</td>
+                <td className="py-2 px-4">{vehicle.customerAadharNo}</td>
+                <td className="py-2 px-4">{vehicle.customerGstin}</td>
+                <td className="py-2 px-4">{vehicle.superwiser}</td>
+                <td className="py-2 px-4">{vehicle.technician}</td>
+                <td className="py-2 px-4">{vehicle.worker}</td>
+                <td className="py-2 px-4">{vehicle.status}</td>
+                <td className="py-2 px-4">{vehicle.userId}</td>
+                <td className="py-2 px-4">{vehicle.date}</td>
+                <td className="py-2 px-4 flex gap-2">
+                  <button type="button" onClick={() => handleEdit(vehicle.vehicleRegId)} className="bg-yellow-500 text-white px-4 py-1 rounded-lg hover:bg-yellow-600 transition">Edit</button>
+                  <button type="button" onClick={() => handleDelete(vehicle.vehicleRegId)} className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 transition">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default GetAllVehicles;
