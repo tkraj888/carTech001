@@ -1,7 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Input, Button, Checkbox, Typography } from "@material-tailwind/react";
 import { useCountries } from "use-react-countries";
+import { motion } from "framer-motion";
 import {
   Menu,
   MenuHandler,
@@ -31,7 +31,7 @@ export function SimpleRegistrationForm() {
     status: false,
     userType: "",
   });
-  // const [password, setPassword] = useState("");
+  
   const navigate = useNavigate();
   const [errors, setErrors] = useState({
     firstName: "",
@@ -52,7 +52,6 @@ export function SimpleRegistrationForm() {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    // Validate input fields
     if (type !== "checkbox") {
       validateInput(name, value);
     }
@@ -60,7 +59,6 @@ export function SimpleRegistrationForm() {
 
   const validateInput = (name, value) => {
     let error = "";
-    let validationErrors = {};
     switch (name) {
       case "firstName":
         error = value.trim() === "" ? "First name is required" : "";
@@ -71,12 +69,9 @@ export function SimpleRegistrationForm() {
       case "email":
         error = !/\S+@\S+\.\S+/.test(value) ? "Invalid email address" : "";
         break;
-        case "mobileNumber":
-          // Validate if the mobile number consists of exactly 10 digits
-          if (!/^\d{10}$/.test(value)) {
-            validationErrors.mobileNumber = "Mobile number must be 10 digits";
-          }
-          break;
+      case "mobileNo":
+        error = !/^\d{10}$/.test(value) ? "Mobile number must be 10 digits" : "";
+        break;
       case "address":
         error = value.trim() === "" ? "Address is required" : "";
         break;
@@ -99,7 +94,6 @@ export function SimpleRegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields before submission
     let hasError = false;
     Object.keys(formStateData).forEach((key) => {
       validateInput(key, formStateData[key]);
@@ -108,7 +102,6 @@ export function SimpleRegistrationForm() {
       }
     });
 
-    // Validate password separately
     if (formStateData.password.trim() === "") {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -118,23 +111,19 @@ export function SimpleRegistrationForm() {
     }
 
     if (!hasError) {
-      // Your form submission logic goes here
-      // console.log("Form data submitted:", formStateData);
-    }
-
-    try {
-      const {data , error} = await SignUp(formStateData);
-      if(error?.status === 400){
-        toast.error(error?.data?.message);
+      try {
+        const { data, error } = await SignUp(formStateData);
+        if (error?.status === 400) {
+          toast.error(error?.data?.message);
+        } else {
+          toast.success(data?.message);
+          setTimeout(() => {
+            navigate("/signin");
+          }, 1000);
+        }
+      } catch (error) {
+        toast.error("Register Unsuccessfully");
       }
-      else{
-        toast.success(data?.message);
-        setTimeout(() => {
-          navigate("/signin");
-        }, 1000);
-      }
-    } catch (error) {
-        toast.error("Register UnSucessfully");
     }
   };
 
@@ -148,196 +137,351 @@ export function SimpleRegistrationForm() {
   const { name, flags, countryCallingCode } = countries[country];
 
   return (
-    <div className="h-auto mt-10 flex justify-center items-center">
-      <CardUi color="transparent" shadow={false}>
-      <ToastContainer />
-        <Typography variant="h3" color="black" className="text-center">
-          Sign Up
-        </Typography>
+    <div 
+      className=" p-6 h-auto mt-3 flex justify-center items-center bg-gradient-to-r from-gray-100 to-gray-300" 
+      style={{ 
+        backgroundImage: 'url("https://img.freepik.com/premium-photo/modern-showroom-with-rows-new-cars_285145-11127.jpg?uid=R154194869&ga=GA1.1.15909760.1718124178&semt=ais_hybrid")', // Replace with your image path
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <motion.div 
+        whileHover={{ scale: 1.05 }} 
+        transition={{ duration: 0.3 }} 
+        className="w-full max-w-md shadow-lg rounded-lg"
+      >
+        <CardUi color="transparent" shadow={false}>
+          <ToastContainer />
+          
+          {/* New Sign Up Title */}
+          <Typography variant="h4" color="black" className="text-center mb-2 shadow p-2 rounded">
+            Sign Up
+          </Typography>
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-2 mb-2 w-80 max-w-screen-lg sm:w-96"
-        >
-          <div className="mb-1 m-4 flex flex-col gap-6 w-100">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              First Name
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="h-auto mt-10 flex justify-center items-center"
+          >
+            <Typography variant="h3" color="black" className="text-center shadow-lg p-2 rounded">
+              Create Your Account
             </Typography>
-            <Inputs
-              label={"Enter your first name"}
-              name="firstName"
-              value={formStateData.firstName}
-              onChange={handleChange}
-              error={errors.firstName}
-              required={"required"}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Last Name
-            </Typography>
-            <Inputs
-              label={"Enter your last name"}
-              name="lastName"
-              value={formStateData.lastName}
-              onChange={handleChange}
-              error={errors.lastName}
-              required={"required"}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Email
-            </Typography>
-            <Inputs
-              label={"Email"}
-              type={"email"}
-              name="email"
-              value={formStateData.email}
-              onChange={handleChange}
-              error={errors.email}
-              required={"required"}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Mobile Number
-            </Typography>
-            <div className="relative flex w-full max-w-[24rem]">
-              <Menu placement="bottom-start">
-                <MenuHandler>
-                  <Button
-                    ripple={false}
-                    variant="text"
-                    color="blue-gray"
-                    className="flex h-10 items-center gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3"
+          </motion.div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="mt-2 mb-2 w-80 max-w-screen-lg sm:w-96"
+          >
+            <div className="mb-1 m-4 flex flex-col gap-6 w-100">
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                First Name
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Enter your first name"}
+                  name="firstName"
+                  value={formStateData.firstName}
+                  onChange={handleChange}
+                  error={errors.firstName}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.firstName ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.firstName && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
                   >
-                    <img
-                      src={flags.svg}
-                      alt={name}
-                      className="h-4 w-4 rounded-full object-cover"
-                    />
-                    {countryCallingCode}
-                  </Button>
-                </MenuHandler>
-                <MenuList className="max-h-[20rem] max-w-[18rem]">
-                  {countries.map(
-                    ({ name, flags, countryCallingCode }, index) => {
-                      return (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          className="flex items-center gap-2"
-                          onClick={() => setCountry(index)}
-                        >
-                          <img
-                            src={flags.svg}
-                            alt={name}
-                            className="h-5 w-5 rounded-full object-cover"
-                          />
-                          {name}{" "}
-                          <span className="ml-auto">{countryCallingCode}</span>
-                        </MenuItem>
-                      );
-                    }
-                  )}
-                </MenuList>
-              </Menu>
-              <Input
-                placeholder="Mobile Number"
-                className="rounded-l-none !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-                containerProps={{
-                  className: "min-w-0",
-                }}
-                label={"Mobile Number"}
-                name="mobileNo"
-                value={formStateData.mobileNo}
+                    {errors.firstName}
+                  </motion.span>
+                )}
+              </motion.div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Last Name
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Enter your last name"}
+                  name="lastName"
+                  value={formStateData.lastName}
+                  onChange={handleChange}
+                  error={errors.lastName}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.lastName ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.lastName && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.lastName}
+                  </motion.span>
+                )}
+              </motion.div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Email
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Email"}
+                  type={"email"}
+                  name="email"
+                  value={formStateData.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.email && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.email}
+                  </motion.span>
+                )}
+              </motion.div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Mobile Number
+              </Typography>
+              <div className="relative flex w-full max-w-[24rem]">
+                <Menu placement="bottom-start">
+                  <MenuHandler>
+                    <Button
+                      ripple={false}
+                      variant="text"
+                      color="blue-gray"
+                      className="flex h-10 items-center gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3 shadow-lg"
+                    >
+                      <img
+                        src={flags.svg}
+                        alt={name}
+                        className="h-4 w-4 rounded-full object-cover"
+                      />
+                      {countryCallingCode}
+                    </Button>
+                  </MenuHandler>
+                  <MenuList className="max-h-[20rem] max-w-[18rem]">
+                    {countries.map(
+                      ({ name, flags, countryCallingCode }, index) => {
+                        return (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            className="flex items-center gap-2"
+                            onClick={() => setCountry(index)}
+                          >
+                            <img
+                              src={flags.svg}
+                              alt={name}
+                              className="h-5 w-5 rounded-full object-cover"
+                            />
+                            {name}{" "}
+                            <span className="ml-auto">{countryCallingCode}</span>
+                          </MenuItem>
+                        );
+                      }
+                    )}
+                  </MenuList>
+                </Menu>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Input
+                    placeholder="Mobile Number"
+                    className="rounded-l-none !border-t-blue-gray-200 focus:!border-t-gray-900 transition duration-300 shadow-lg focus:ring focus:ring-blue-200"
+                    labelProps={{
+                      className: "before:content-none after:content-none",
+                    }}
+                    containerProps={{
+                      className: "min-w-0",
+                    }}
+                    label={"Mobile Number"}
+                    name="mobileNo"
+                    value={formStateData.mobileNo}
+                    onChange={handleChange}
+                    type={"number"}
+                    required={"required"}
+                  />
+                </motion.div>
+              </div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Password
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Password"}
+                  type={"password"}
+                  name="password"
+                  value={formStateData.password}
+                  onChange={handleChange}
+                  error={errors.password}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.password && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.password}
+                  </motion.span>
+                )}
+              </motion.div>
+
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Address
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Address"}
+                  name="address"
+                  value={formStateData.address}
+                  onChange={handleChange}
+                  error={errors.address}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.address ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.address && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.address}
+                  </motion.span>
+                )}
+              </motion.div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                City
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"City"}
+                  name="city"
+                  value={formStateData.city}
+                  onChange={handleChange}
+                  error={errors.city}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.city ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.city && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.city}
+                  </motion.span>
+                )}
+              </motion.div>
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Area
+              </Typography>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Inputs
+                  label={"Area"}
+                  name="area"
+                  value={formStateData.area}
+                  onChange={handleChange}
+                  error={errors.area}
+                  required={"required"}
+                  className={`transition duration-300 shadow-lg ${errors.area ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                />
+                {errors.area && (
+                  <motion.span 
+                    className="text-red-500 text-sm mt-1" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ duration: 0.3 }}
+                  >
+                    {errors.area}
+                  </motion.span>
+                )}
+              </motion.div>
+            </div>
+            <div className="ml-4">
+              <Checkbox
+                label={
+                  <Typography
+                    variant="small"
+                    color="gray"
+                    className="flex items-center font-normal"
+                  >
+                    I agree to the
+                    <Link
+                      to="#"
+                      className="font-medium transition-colors hover:text-gray-900"
+                    >
+                      &nbsp;Terms and Conditions
+                    </Link>
+                  </Typography>
+                }
+                containerProps={{ className: "-ml-2.5" }}
+                name="status"
+                checked={formStateData.status}
                 onChange={handleChange}
-                type={"number"}
-                required={"required"}
               />
             </div>
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
-            </Typography>
-            <Inputs
-              label={"Password"}
-              type={"password"}
-              name="password"
-              value={formStateData.password}
-              onChange={handleChange}
-              error={errors.password}
-              required={"required"}
-            />
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Address
-            </Typography>
-            <Inputs
-              label={"Address"}
-              name="address"
-              value={formStateData.address}
-              onChange={handleChange}
-              error={errors.address}
-              required={"required"}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              City
-            </Typography>
-            <Inputs
-              label={"City"}
-              name="city"
-              value={formStateData.city}
-              onChange={handleChange}
-              error={errors.city}
-              required={"required"}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Area
-            </Typography>
-            <Inputs
-              label={"Area"}
-              name="area"
-              value={formStateData.area}
-              onChange={handleChange}
-              error={errors.area}
-              required={"required"}
-            />
-          </div>
-          <div className="ml-4">
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
+            <div className="flex justify-center">
+              <Button 
+                className="mt-6 w-28 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-lg" 
+                fullWidth 
+                type="submit"
               >
-                I agree to the
-                <Link
-                  to="#"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </Link>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-            name="status"
-            checked={formStateData.status}
-            onChange={handleChange}
-            // error={errors.agreeTerms}
-          />
-          </div>
-          <div className="flex justify-center">
-          <Button className="mt-6 w-28" fullWidth type="submit">
-            Sign Up
-          </Button>
-          </div>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Already have an account?{" "}
-            <Link to="/signin" className="font-medium text-gray-900">
-              Sign In
-            </Link>
-          </Typography>
-        </form>
-      </CardUi>
+                Sign Up
+              </Button>
+            </div>
+            <Typography color="gray" className="mt-4 text-center font-normal">
+              Already have an account?{" "}
+              <Link to="/signin" className="font-medium text-gray-900">
+                Sign In
+              </Link>
+            </Typography>
+          </form>
+        </CardUi>
+      </motion.div>
     </div>
   );
 }
