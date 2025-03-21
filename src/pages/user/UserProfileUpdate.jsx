@@ -1,30 +1,75 @@
 /* eslint-disable no-unused-vars */
 
 import { useParams } from "react-router-dom";
-import { useUserupdateMutation, useGetUserByIdQuery } from "../../services/userAPI";
-import Inputs from "../../forms/Inputs";
-import React, { useEffect } from "react";
+import {
+  useUserupdateMutation,
+  useGetUserByIdQuery,
+} from "../../services/userAPI";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FiLoader } from 'react-icons/fi'; 
-const UserProfileUpdate = () => {
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PropTypes from "prop-types";
+import {
+  FiLoader,
+  FiUpload,
+  FiUser,
+  FiMail,
+  FiMapPin,
+  FiPhone,
+} from "react-icons/fi";
+
+const EditField = ({ label, name, value, onChange, icon }) => (
+  <div className="w-full">
+    <label htmlFor={name} className="block text-sm text-profile-text mb-2">
+      {label}
+    </label>
+    <div className="relative">
+      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-profile-purple">
+        {icon}
+      </div>
+      <input
+        type="text"
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="w-full pl-12 pr-4 py-4 bg-white rounded-lg shadow-sm border border-gray-200 focus:border-profile-purple focus:ring-1 focus:ring-profile-purple outline-none"
+      />
+    </div>
+  </div>
+);
+
+EditField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  icon: PropTypes.element.isRequired,
+};
+
+const EditProfile = () => {
   const { userProfileId } = useParams();
-
   const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useGetUserByIdQuery(userProfileId);
 
+  const { data, isLoading, isError, error } =
+    useGetUserByIdQuery(userProfileId);
   const [Userupdate] = useUserupdateMutation();
 
-  const [inputField, setInputField] = React.useState({
+  // State for the form fields (note: mobileNo key used to match API)
+  const [inputField, setInputField] = useState({
     address: "",
     city: "",
     firstName: "",
     lastName: "",
     email: "",
-    mobileNo: ""
+    mobileNo: "",
   });
+
+  // Image state and file ref for profile picture change
+  const fileInputRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     if (data) {
@@ -35,21 +80,28 @@ const UserProfileUpdate = () => {
         firstName: data.firstName || "",
         lastName: data.lastName || "",
         email: data.email || "",
-        mobileNo: data.mobile_no || ""
+        mobileNo: data.mobile_no || "",
       });
     }
   }, [data]);
 
-  const onChangeFormhandler = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInputField((prevVal) => ({
-      ...prevVal,
-      [name]: value,
-    }));
+    setInputField((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSave = async () => {
     const userupdate = {
       id: userProfileId,
       mobile_no: inputField.mobileNo,
@@ -62,33 +114,23 @@ const UserProfileUpdate = () => {
 
     try {
       const res = await Userupdate({ userupdate, userProfileId }).unwrap();
-
-      if (res.code === 'Successful') {
-        toast.success("Changes successful", {
-          // autoClose: 2000,
-        });
-
+      if (res.code === "Successful") {
+        toast.success("Changes successful");
         if (userupdate.email !== data.email) {
-          // If email is changed, redirect to sign-in page
           setTimeout(() => {
-            navigate('/signin');
+            navigate("/signin");
           }, 2000);
         } else {
-          // If other fields are changed, navigate back to the previous page
           setTimeout(() => {
             navigate(-1);
           }, 1000);
         }
       } else {
-        toast.error("Failed to update User", {
-          autoClose: 2000, // 2 seconds
-        });
+        toast.error("Failed to update User", { autoClose: 2000 });
       }
-    } catch (error) {
-      toast.error("Error updating User", {
-        autoClose: 2000, // 2 seconds
-      });
-      console.log("Error:", error);
+    } catch (err) {
+      toast.error("Error updating User", { autoClose: 2000 });
+      console.log("Error:", err);
     }
   };
 
@@ -105,83 +147,123 @@ const UserProfileUpdate = () => {
   }
 
   return (
-    <div className="mx-auto container px-4 sm:px-6 lg:px-8 flex justify-center w-full md:w-[50%] mt-10">
-      <form className="w-full border border-gray-500 px-2 py-2 rounded-md mt-2 mb-2" onSubmit={onSubmitHandler}>
-        <div className="mt-3">
-          <p className="text-3xl font-semibold">Edit User Details</p>
+    <div className="mx-auto container px-4 sm:px-6 lg:px-8 flex justify-center w-full md:w-[60%] mt-10">
+      <div className="w-full">
+        <ToastContainer />
+        {/* Header */}
+        <div className="bg-gradient-profile rounded-2xl p-8 mb-8">
+          <h1 className="text-2xl font-semibold text-profile-text">
+            Edit Profile
+          </h1>
+          <p className="text-profile-label">Update your personal information</p>
         </div>
-        <div className="mt-5">
-          <Inputs
-            label={"First Name"}
-            onChange={onChangeFormhandler}
+
+        {/* Profile image and change photo */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-24 h-24 bg-gray-200 rounded-full mb-4 relative">
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-500">
+                No Image
+              </div>
+            )}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              className="hidden"
+              accept="image/*"
+            />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-2 bg-profile-purple text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+            >
+              <FiUpload size={16} />
+              <span>Change Photo</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Edit fields grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <EditField
+            label="First Name"
+            name="firstName"
             value={inputField.firstName}
-            type={"text"}
-            name={"firstName"}
-            required
+            onChange={handleInputChange}
+            icon={<FiUser />}
           />
-        </div>
-        <div className="mt-5">
-          <Inputs
-            label={"Last Name"}
-            onChange={onChangeFormhandler}
+          <EditField
+            label="Last Name"
+            name="lastName"
             value={inputField.lastName}
-            type={"text"}
-            name={"lastName"}
-            required
+            onChange={handleInputChange}
+            icon={<FiUser />}
           />
-        </div>
-        <div className="mt-5">
-          <Inputs
-            label={"Email"}
-            onChange={onChangeFormhandler}
+          <EditField
+            label="Email"
+            name="email"
             value={inputField.email}
-            type={"email"}
-            name={"email"}
-            required
+            onChange={handleInputChange}
+            icon={<FiMail />}
           />
-        </div>
-        <div className="mt-5">
-          <Inputs
-            label={"MobileNo"}
-            onChange={onChangeFormhandler}
-            value={inputField.mobileNo}
-            type={"number"}
-            name={"mobileNo"}
-            required
-          />
-        </div>
-        <div className="mt-5">
-          <Inputs
-            label={"Address"}
-            onChange={onChangeFormhandler}
-            value={inputField.address}
-            type={"text"}
-            name={"address"}
-            required
-          />
-        </div>
-        <div className="mt-5">
-          <Inputs
-            label={"City"}
-            onChange={onChangeFormhandler}
+          <EditField
+            label="City"
+            name="city"
             value={inputField.city}
-            type={"text"}
-            name={"city"}
-            required
+            onChange={handleInputChange}
+            icon={<FiMapPin />}
+          />
+          <EditField
+            label="Mobile Number"
+            name="mobileNo"
+            value={inputField.mobileNo}
+            onChange={handleInputChange}
+            icon={<FiPhone />}
+          />
+          {/* Postal Code field removed as per your requirements */}
+        </div>
+
+        {/* Address field */}
+        <div className="mt-6">
+          <EditField
+            label="Address"
+            name="address"
+            value={inputField.address}
+            onChange={handleInputChange}
+            icon={<FiMapPin />}
           />
         </div>
-        <div className="mt-5 ml-2">
-          <Button
-            type="submit"
-            className="py-2 px-2 bg-indigo-600 text-white"
+
+        {/* Action buttons */}
+        <div className="mt-8 mb-6 flex justify-center md:justify-end gap-4">
+          <button
+            onClick={() =>
+              setTimeout(() => {
+                navigate(-1);
+              }, 0)
+            }
+            className="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
           >
-            Submit
-          </Button>
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="bg-profile-purple text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+          >
+            Save Changes
+          </button>
         </div>
-      </form>
-      <ToastContainer />
+      </div>
     </div>
   );
 };
 
-export default UserProfileUpdate;
+export default EditProfile;
