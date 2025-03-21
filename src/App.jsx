@@ -171,7 +171,11 @@ export default function App() {
               <AdminMiddleware allowedRoles={[...Object.values(onlyAdmin)]} />
             }
           >
+<<<<<<< HEAD
                         <Route path="/Admin/UserRequest" element={<AdminUserReq />} />
+=======
+            <Route path="/Admin/UserRequest" element={<AdminUserReq />} />
+>>>>>>> ajent1
 
             <Route path="/admin" element={<Admin />} />
             <Route
@@ -307,6 +311,7 @@ export default function App() {
             <Route path="/biddingcardetail" element={<BiddingCarDetail />} />
           </Route>
           <Route
+<<<<<<< HEAD
               path="/user/car/status/:userFormId"
               element={<FinalReportUser />}
             />
@@ -314,6 +319,15 @@ export default function App() {
               path="/user/"
               element={<FinalReportUser />}
             />
+=======
+            path="/user/car/status/:userFormId"
+            element={<FinalReportUser />}
+          />
+          {/* <Route
+              path="/user/"
+              element={<FinalReportUser />}
+            /> */}
+>>>>>>> ajent1
           <Route
             element={
               <InspectorMiddleware
@@ -321,7 +335,10 @@ export default function App() {
               />
             }
           >
+<<<<<<< HEAD
             
+=======
+>>>>>>> ajent1
             <Route
               path="/Inspector/ChangePassword"
               element={<InspectorChangePassword />}
@@ -340,7 +357,14 @@ export default function App() {
               element={<CarVerify />}
             />
             <Route path="/inspector/car" element={<CarListing />} />
+<<<<<<< HEAD
             <Route path="/inspector/user/cars" element={<UserInspectionCars />} />
+=======
+            <Route
+              path="/inspector/user/cars"
+              element={<UserInspectionCars />}
+            />
+>>>>>>> ajent1
             {/* <Route path="/inspector/carverify/:beadingCarId" element={<CarVerify />} /> */}
             {/* <Route path="/inspector/car" element={<CarListing />} /> */}
             <Route path="/inspector/car/add" element={<BiddingAddCar2 />} />
@@ -384,7 +408,14 @@ export default function App() {
               />
             }
           >
+<<<<<<< HEAD
             <Route path="/Seller/UserRequest/Edit/:userFormId" element={<SalerUserSaleReqEdit />} />
+=======
+            <Route
+              path="/Seller/UserRequest/Edit/:userFormId"
+              element={<SalerUserSaleReqEdit />}
+            />
+>>>>>>> ajent1
             <Route path="/seller/request/:status" element={<AdminUserReq />} />
             <Route
               path="/Seller/ChangePassword"
@@ -415,8 +446,15 @@ export default function App() {
           <Route path="/sellcarlist" element={<SellCarList />} />
           <Route path="/sellcarform" element={<SellCarForm />} />
 
+<<<<<<< HEAD
           <Route path="/user/sell/edit/:userFormId" element={<EditSellForm/>} />
 
+=======
+          <Route
+            path="/user/sell/edit/:userFormId"
+            element={<EditSellForm />}
+          />
+>>>>>>> ajent1
 
           <Route path="/user" element={<UserInfo />} />
         </Route>
