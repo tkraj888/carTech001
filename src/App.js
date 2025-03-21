@@ -6,9 +6,6 @@ function App() {
 
 
 
-
-
-
 const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
 const API_URL = "https://carauto01-production-8b0b.up.railway.app/favorites";
 

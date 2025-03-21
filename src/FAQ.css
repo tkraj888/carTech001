@@ -1,0 +1,86 @@
+/* src/FAQ.css */
+.faq-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Palatino (serif);
+    background-image: url('./car-background.jpg'); /* Add your image here */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the image */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(250, 246, 5); /* Change text color for better contrast */
+  }
+  
+  .faq-search {
+    width: 60%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .faq-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for items */
+  }
+  
+  .faq-question {
+    background-color: #f9f9f9;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  .faq-question:hover {
+    background-color: #e9e9e9;
+  }
+  
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0 15px;
+  }
+  
+  .faq-answer.open {
+    max-height: 200px; /* Adjust based on content */
+    padding: 15px;
+    background-color: #fff;
+  }
+  
+  .faq-arrow {
+    font-size: 18px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .faq-container {
+      padding: 10px;
+    }
+  
+    .faq-search {
+      font-size: 14px;
+    }
+  
+    .faq-question {
+      padding: 10px;
+    }
+  
+    .faq-answer {
+      padding: 0 10px;
+    }
+  }
