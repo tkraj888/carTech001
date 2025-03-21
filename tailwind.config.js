@@ -24,6 +24,15 @@ export default withMT({
       animation: {
         slidein: "slidein 1s ease var(--slidein-delay,0) forwards",
       },
+      colors: {
+        "profile-bg": "#F8F7FF",
+        "profile-text": "#1A1A1A",
+        "profile-label": "#666666",
+        "profile-purple": "#6366F1",
+      },
+      backgroundImage: {
+        "gradient-profile": "linear-gradient(135deg, #EEF2FF 0%, #F1F5F9 100%)",
+      },
     },
   },
   plugins: [],

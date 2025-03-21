@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import Inputs from "../forms/Inputs";
 import CardUi from "../ui/CardUi";
 import { useSignUpMutation } from "../services/authAPI";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export function SimpleRegistrationForm() {
@@ -31,7 +31,7 @@ export function SimpleRegistrationForm() {
     status: false,
     userType: "",
   });
-  
+
   const navigate = useNavigate();
   const [errors, setErrors] = useState({
     firstName: "",
@@ -70,7 +70,9 @@ export function SimpleRegistrationForm() {
         error = !/\S+@\S+\.\S+/.test(value) ? "Invalid email address" : "";
         break;
       case "mobileNo":
-        error = !/^\d{10}$/.test(value) ? "Mobile number must be 10 digits" : "";
+        error = !/^\d{10}$/.test(value)
+          ? "Mobile number must be 10 digits"
+          : "";
         break;
       case "address":
         error = value.trim() === "" ? "Address is required" : "";
@@ -137,25 +139,30 @@ export function SimpleRegistrationForm() {
   const { name, flags, countryCallingCode } = countries[country];
 
   return (
-    <div 
-      className=" p-6 h-auto mt-3 flex justify-center items-center bg-gradient-to-r from-gray-100 to-gray-300" 
-      style={{ 
-        backgroundImage: 'url("https://img.freepik.com/premium-photo/modern-showroom-with-rows-new-cars_285145-11127.jpg?uid=R154194869&ga=GA1.1.15909760.1718124178&semt=ais_hybrid")', // Replace with your image path
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+    <div
+      className=" p-6 h-auto mt-3 flex justify-center items-center bg-gradient-to-r from-gray-100 to-gray-300"
+      style={{
+        backgroundImage:
+          'url("https://img.freepik.com/premium-photo/modern-showroom-with-rows-new-cars_285145-11127.jpg?uid=R154194869&ga=GA1.1.15909760.1718124178&semt=ais_hybrid")', // Replace with your image path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      <motion.div 
-        whileHover={{ scale: 1.05 }} 
-        transition={{ duration: 0.3 }} 
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3 }}
         className="w-full max-w-md shadow-lg rounded-lg"
       >
         <CardUi color="transparent" shadow={false}>
           <ToastContainer />
-          
+
           {/* New Sign Up Title */}
-          <Typography variant="h4" color="black" className="text-center mb-2 shadow p-2 rounded">
+          <Typography
+            variant="h4"
+            color="black"
+            className="text-center mb-2 shadow p-2 rounded"
+          >
             Sign Up
           </Typography>
 
@@ -165,7 +172,11 @@ export function SimpleRegistrationForm() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="h-auto mt-10 flex justify-center items-center"
           >
-            <Typography variant="h3" color="black" className="text-center shadow-lg p-2 rounded">
+            <Typography
+              variant="h3"
+              color="black"
+              className="text-center shadow-lg p-2 rounded"
+            >
               Create Your Account
             </Typography>
           </motion.div>
@@ -190,13 +201,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.firstName}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.firstName ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.firstName ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.firstName && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.firstName}
@@ -218,13 +231,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.lastName}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.lastName ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.lastName ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.lastName && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.lastName}
@@ -247,13 +262,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.email}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.email && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.email}
@@ -296,7 +313,9 @@ export function SimpleRegistrationForm() {
                               className="h-5 w-5 rounded-full object-cover"
                             />
                             {name}{" "}
-                            <span className="ml-auto">{countryCallingCode}</span>
+                            <span className="ml-auto">
+                              {countryCallingCode}
+                            </span>
                           </MenuItem>
                         );
                       }
@@ -342,13 +361,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.password}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.password && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.password}
@@ -371,13 +392,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.address}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.address ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.address ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.address && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.address}
@@ -399,13 +422,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.city}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.city ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.city ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.city && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.city}
@@ -427,13 +452,15 @@ export function SimpleRegistrationForm() {
                   onChange={handleChange}
                   error={errors.area}
                   required={"required"}
-                  className={`transition duration-300 shadow-lg ${errors.area ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200`}
+                  className={`transition duration-300 shadow-lg ${
+                    errors.area ? "border-red-500" : "border-gray-300"
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200`}
                 />
                 {errors.area && (
-                  <motion.span 
-                    className="text-red-500 text-sm mt-1" 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.span
+                    className="text-red-500 text-sm mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
                     {errors.area}
@@ -465,9 +492,9 @@ export function SimpleRegistrationForm() {
               />
             </div>
             <div className="flex justify-center">
-              <Button 
-                className="mt-6 w-28 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-lg" 
-                fullWidth 
+              <Button
+                className="mt-6 w-28 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-lg"
+                fullWidth
                 type="submit"
               >
                 Sign Up

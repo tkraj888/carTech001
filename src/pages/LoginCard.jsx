@@ -113,7 +113,7 @@ export function LoginCard() {
               </Typography>
             </CardHeader>
 
-            <form onSubmit={handleSubmit}> 
+            <form onSubmit={handleSubmit}>
               <CardBody className="flex flex-col gap-6">
                 {/* Email Input with Glow and Slide-Up on Focus */}
                 <motion.div
@@ -126,7 +126,6 @@ export function LoginCard() {
                     type="email"
                     value={formStateData.username}
                     onChange={handleChange}
-                    
                   />
                 </motion.div>
 
@@ -154,7 +153,6 @@ export function LoginCard() {
                         />
                       )
                     }
-                    
                   />
                 </motion.div>
               </CardBody>
