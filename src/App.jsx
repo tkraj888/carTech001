@@ -89,7 +89,7 @@ import WinnerSection from "./pages/dealer/WinnerSection";
 import { FavoritePage } from "./ui/FavoritePage";
 import { CardDefault } from "./ui/CardDefault";
 import WebSocketConnection from "./Utiles/WebSocketConnection";
-import UserProfileUpdate from "./pages/user/UserProfileUpdate";
+import UserProfileUpdate from "./pages/user/UserProfileUpdate"; // Re-importing UserProfileUpdate
 import UserInfo from "./pages/user/UserInfo";
 import SalesDealer from "./pages/sales/SalesDealer";
 import UserChangePassword from "./pages/user/UserChangePassword";
@@ -171,7 +171,7 @@ export default function App() {
               <AdminMiddleware allowedRoles={[...Object.values(onlyAdmin)]} />
             }
           >
-            <Route path="/Admin/UserRequest" element={<AdminUserReq />} />
+                        <Route path="/Admin/UserRequest" element={<AdminUserReq />} />
 
             <Route path="/admin" element={<Admin />} />
             <Route
@@ -307,13 +307,13 @@ export default function App() {
             <Route path="/biddingcardetail" element={<BiddingCarDetail />} />
           </Route>
           <Route
-            path="/user/car/status/:userFormId"
-            element={<FinalReportUser />}
-          />
-          {/* <Route
+              path="/user/car/status/:userFormId"
+              element={<FinalReportUser />}
+            />
+            <Route
               path="/user/"
               element={<FinalReportUser />}
-            /> */}
+            />
           <Route
             element={
               <InspectorMiddleware
@@ -321,6 +321,7 @@ export default function App() {
               />
             }
           >
+            
             <Route
               path="/Inspector/ChangePassword"
               element={<InspectorChangePassword />}
@@ -339,10 +340,7 @@ export default function App() {
               element={<CarVerify />}
             />
             <Route path="/inspector/car" element={<CarListing />} />
-            <Route
-              path="/inspector/user/cars"
-              element={<UserInspectionCars />}
-            />
+            <Route path="/inspector/user/cars" element={<UserInspectionCars />} />
             {/* <Route path="/inspector/carverify/:beadingCarId" element={<CarVerify />} /> */}
             {/* <Route path="/inspector/car" element={<CarListing />} /> */}
             <Route path="/inspector/car/add" element={<BiddingAddCar2 />} />
@@ -386,10 +384,7 @@ export default function App() {
               />
             }
           >
-            <Route
-              path="/Seller/UserRequest/Edit/:userFormId"
-              element={<SalerUserSaleReqEdit />}
-            />
+            <Route path="/Seller/UserRequest/Edit/:userFormId" element={<SalerUserSaleReqEdit />} />
             <Route path="/seller/request/:status" element={<AdminUserReq />} />
             <Route
               path="/Seller/ChangePassword"
@@ -420,10 +415,8 @@ export default function App() {
           <Route path="/sellcarlist" element={<SellCarList />} />
           <Route path="/sellcarform" element={<SellCarForm />} />
 
-          <Route
-            path="/user/sell/edit/:userFormId"
-            element={<EditSellForm />}
-          />
+          <Route path="/user/sell/edit/:userFormId" element={<EditSellForm/>} />
+
 
           <Route path="/user" element={<UserInfo />} />
         </Route>
