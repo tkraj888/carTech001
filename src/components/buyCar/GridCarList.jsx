@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import { CardDefault } from "../../ui/CardDefault";
-// import CardUi from "../../ui/CardUi";
 import { useEffect, useState } from "react";
 
-const GridCarList = ({ data, error,refetch }) => {
+const GridCarList = ({ data, error, refetch, sortCriteria }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -14,10 +13,19 @@ const GridCarList = ({ data, error,refetch }) => {
     }
   }, [data, error]);
 
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (sortCriteria === "name") {
+      return a.name.localeCompare(b.name);
+    } else if (sortCriteria === "price") {
+      return a.price - b.price;
+    }
+    return 0; // Default case
+  });
+
   return (
     <>
-      <div className="grid grid-cols-1 gap-y-6 md:grid-cols-1 md:gap-y-6 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-4 mb-5">
-        {posts?.map((items, index) => {
+      <div className="grid grid-cols-1 gap-y-6 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        {sortedPosts?.map((items, index) => {
           return (
             <div key={index}>
               <div className="flex">

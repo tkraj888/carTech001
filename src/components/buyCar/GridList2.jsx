@@ -17,7 +17,7 @@ const GridCarList = ({ data, error }) => {
   return (
     <>
       <CardUi>
-        <div className="grid md:grid-cols-3 md:grid-rows-1 gap-4 justify-center">
+        <div className="grid md:grid-cols-4 md:grid-rows-1 gap-4 justify-center">
           {posts?.map((items, index) => {
             return (
               <div key={index}>

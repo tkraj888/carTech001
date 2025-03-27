@@ -1,21 +1,17 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Card } from "@material-tailwind/react";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { FaFilter } from "react-icons/fa";
-import Slider from "@mui/material/Slider";
 import {
   useGetOnlyBrandsQuery,
   useGetVariantsQuery,
 } from "../../services/brandAPI";
 import {
   Autocomplete,
-  Checkbox,
-  FormControlLabel,
   TextField,
 } from "@mui/material";
+import PropTypes from "prop-types"; 
 
-// eslint-disable-next-line react/prop-types
 const FilterPremiumCars1 = ({ setUrlState }) => {
   const { data: brandData } = useGetOnlyBrandsQuery();
   const brands = brandData?.list.map((item) => item.brand) || [];
@@ -23,14 +19,9 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [modelOptions, setModelOptions] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [value, setValue] = useState([1500000, 100000000]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [underTwoLakh, setUnderTwoLakh] = useState(false); // New state for the checkbox
-  const [twoLakhFiveLakh, setTwoLakhFiveLakh] = useState(false); // New state for the checkbox
-  const [fiveToEightLakh, setFiveToEightLakh] = useState(false); // New state for the checkbox  const [twoLakhFiveLakh, setTwoLakhFiveLakh] = useState(false); // New state for the checkbox
-  const [eightToTenLakh, setEightToTenLakh] = useState(false); // New state for the checkbox
-  const [aboveTenLakh, setAboveTenLakh] = useState(false); // New state for the checkbox
+  const [priceError, setPriceError] = useState("");
 
   const { data: variantData } = useGetVariantsQuery(selectedBrand, {
     skip: !selectedBrand,
@@ -38,7 +29,7 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
 
   useEffect(() => {
     if (variantData) {
-      const models = [...new Set(variantData.list.map((item) => item.variant))]; // Use Set to remove duplicates
+      const models = [...new Set(variantData.list.map((item) => item.variant))];
       setModelOptions(models);
     }
   }, [variantData]);
@@ -49,7 +40,7 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
     setFilterForm({
       ...filterForm,
       brand,
-      model: "", // Reset model when brand changes
+      model: "",
     });
   };
 
@@ -71,21 +62,21 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
     ownership: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFilterForm({ ...filterForm, [name]: value });
-  };
-
   const submitHandle = (e) => {
     e.preventDefault();
-    const minPrice = value[0]; // Minimum price from the slider
-    const maxPrice = value[1]; // Maximum price from the slider
+    const min = parseInt(minPrice.replace(/,/g, ""));
+    const max = parseInt(maxPrice.replace(/,/g, ""));
+    if (min > max) {
+      alert("Minimum price cannot exceed maximum price.");
+      return;
+    }
+
     const url = {
       Area: filterForm.area,
       Year: filterForm.year,
       Brand: filterForm.brand.toUpperCase(),
       Model: filterForm.model,
-      FuleType: filterForm.fuelType,
+      FuelType: filterForm.fuelType,
       Transmission: filterForm.transmission,
       MinPrice: minPrice,
       MaxPrice: maxPrice,
@@ -94,23 +85,20 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
   };
 
   const resetForm = () => {
-    setValue([1500000, 100000000]); // Reset slider values to default
-    setSelectedBrand(""); // Reset brand selection
-    setModelOptions([]); // Reset model options
-    setFilterForm({
-      area: "", // Reset area
-      year: "", // Reset year
-      brand: "", // Reset brand
-      model: "", // Reset model
-      fuelType: "", // Reset fuel type
-      transmission: "", // Reset transmission
-    });
-    setUnderTwoLakh(false); // Reset the checkbox
-    setTwoLakhFiveLakh(false);
-    setFiveToEightLakh(false);
-    setEightToTenLakh(false);
-    setAboveTenLakh(false);
+    setMinPrice("10,00,000");
+    setMaxPrice("");
+    setPriceError("");
 
+    setSelectedBrand("");
+    setModelOptions([]);
+    setFilterForm({
+      area: "",
+      year: "",
+      brand: "",
+      model: "",
+      fuelType: "",
+      transmission: "",
+    });
     setUrlState({
       area: "",
       year: "",
@@ -118,13 +106,10 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
       model: "",
       fuelType: "",
       transmission: "",
-      MinPrice: 1500000, // Reset MinPrice
-      MaxPrice: 100000000, // Reset MaxPrice
+      MinPrice: "",
+      MaxPrice: "",
     });
   };
-
-  let formattedAmountMin = new Intl.NumberFormat("en-IN").format(value[0]);
-  let formattedAmountMax = new Intl.NumberFormat("en-IN").format(value[1]);
 
   const AreaData = [
     { area: "Viman Nagar"},
@@ -151,21 +136,19 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
   ];
 
   const Year = [
-   
-    {  year: 2015 },
-    {  year: 2016 },
-    {  year: 2017 },
-    {  year: 2018 },
-    {  year: 2019 },
-    {  year: 2020 },
-    {  year: 2021 },
-    {  year: 2022 },
-    {  year: 2023 },
-    {  year: 2024 },
+    { year: 2015 },
+    { year: 2016 },
+    { year: 2017 },
+    { year: 2018 },
+    { year: 2019 },
+    { year: 2020 },
+    { year: 2021 },
+    { year: 2022 },
+    { year: 2023 },
+    { year: 2024 },
   ];
 
-
-  const FuleType = [
+  const FuelType = [
     { fuelType: "Petrol" },
     { fuelType: "Diesel" },
     { fuelType: "Electric" },
@@ -178,310 +161,244 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
     { transmission: "Manual" },
   ];
 
-  const handleSliderChange = (event, newValue) => {
-    let [min, max] = newValue;
+  const handlePriceChange = (e, isMin) => {
+    const value = e.target.value.replace(/,/g, "");
+    const numericValue = value.replace(/[^0-9]/g, "");
+    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    // Ensure the min slider value takes steps of 50000 until 1000000
-    if (min < 1000000) {
-      min = Math.floor(min / 50000) * 50000;
-    } else {
-      min = Math.floor(min / 500000) * 500000;
+    if (isMin) {
+      if (parseInt(numericValue) > 1000000000) {
+        setPriceError("Minimum Amount should be in numbers between 20,00,000 and 100,00,00,000");
+        
+      } else {
+        setPriceError("");
+        setMinPrice(formattedValue);
+      }
+    } 
+    else {
+      const min = parseInt(minPrice.replace(/,/g, ""));
+      if (parseInt(numericValue) === min) {
+        setPriceError("Not a price range, fixed amount");
+      }  
+      else {
+        setPriceError("");
+        setMaxPrice(formattedValue);
+      }
     }
-
-    // Ensure the max slider value follows its logic
-    if (max < 1000000) {
-      max = Math.floor(max / 50000) * 50000;
-    } else {
-      max = Math.floor(max / 500000) * 500000;
-    }
-
-    // Apply constraints
-    if (min > max) {
-      min = max; // Ensure min does not exceed max
-    }
-
-    // Update state
-    setValue([min, max]);
-    setMinPrice(min.toString());
-    setMaxPrice(max.toString());
-  };
-  const calculateStep = (value) => {
-    return value < 7000000 ? 50000 : 500000;
-  };
-
-  const handleMinPriceChange = (e) => {
-    const min = parseInt(e.target.value.replace(/,/g, ""));
-    if (
-      !isNaN(min) &&
-      min >= 0 &&
-      (maxPrice === "" || min <= parseInt(maxPrice.replace(/,/g, "")))
-    ) {
-      setMinPrice(e.target.value);
-      setValue([min, value[1] !== null ? value[1] : 100000000]);
-    } else if (min > parseInt(maxPrice.replace(/,/g, ""))) {
-      setMinPrice(maxPrice);
-      setValue([
-        parseInt(maxPrice.replace(/,/g, "")),
-        parseInt(maxPrice.replace(/,/g, "")),
-      ]);
-    } else {
-      setMinPrice("");
-    }
-  };
-
-  // Handle manual input for max price
-  const handleMaxPriceChange = (e) => {
-    const max = parseInt(e.target.value.replace(/,/g, ""));
-    if (
-      !isNaN(max) &&
-      max <= 100000000 &&
-      (minPrice === "" || max >= parseInt(minPrice.replace(/,/g, "")))
-    ) {
-      setMaxPrice(e.target.value);
-      setValue([value[0] !== null ? value[0] : 0, max]);
-    } else if (max < parseInt(minPrice.replace(/,/g, ""))) {
-      setMaxPrice(minPrice);
-      setValue([
-        parseInt(minPrice.replace(/,/g, "")),
-        parseInt(minPrice.replace(/,/g, "")),
-      ]);
-    } else {
-      setMaxPrice("");
-    }
+  
   };
 
   return (
-    <div className="border-2 shadow-lg rounded-lg m-2">
-      <div className="flex justify-between">
-        <div className="-mt-10 text-black text-3xl font-[latto] font-bold flex hover:rounded-2xl hover:shadow-2xl">
-          Premium Cars
-        </div>
-        <div>
+    <div>
+      <div className="container mx-auto px-4">
+        <div className="flex justify-end mb-6">
           <button
             type="button"
-            className="-mt-10 text-black text-lg font-bold font-[latto] flex hover:rounded-2xl hover:shadow-2xl "
+            className="text-black text-lg font-bold font-[latto] flex items-center bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             onClick={() => setShowFilters(!showFilters)}
           >
-            <span className="mt-[6px] mr-1">
+            <span className="mr-2">
               <FaFilter />
             </span>
-            Filter
+            Filter Premium Cars...
           </button>
         </div>
       </div>
 
-      <Card className={`p-4 ${showFilters ? "block" : "hidden bg-gray-100"}`}>
-        <div className="space-y-4">
-          <form onSubmit={submitHandle}>
-            <div>
-              <p className="font-bold mb-5 text-xl text-indigo-400">Filters</p>
+      {showFilters && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
+          <Card className="p-6 bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <p className="font-arial mb-7 text-2xl text-indigo-400 text-center">Filters...</p>
+
+              <button
+                className="text-black text-2xl mb-7"
+                onClick={() => setShowFilters(false)}
+              >
+                &times;
+              </button>
             </div>
-            <div className="md:mb-1 md:grid md:grid-cols-5 md:gap-6 md:items-center">
-              <div>
-                <Typography
-                  variant="h6"
-                  color="blue-gray"
-                  className=" font-bold text-black font-[latto] text-lg"
-                >
-                  Price Range
-                </Typography>
-
-                <div className="flex justify-center items-center">
-                  <div style={{ width: "300px" }}></div>
-                </div>
-                <div className="flex flex-col gap-3 justify-between">
-                  <div className="flex justify-between">
-                    <div className="flex">
-                      <span className="text-black p-2 font-[latto]">
-                        ₹{formattedAmountMin}
-                      </span>
+                <div className="space-y-4">
+                  <form onSubmit={submitHandle}>
+                  <div className="flex justify-between items-center">
+                    <label className="font-bold text-lg">Sort by:-</label>
+                    <select className="border rounded p-2">
+                      <option value="name">By Name (A-Z)</option>
+                      <option value="price">By Price (Low to High)</option>
+                    </select>
+                  </div>
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-between">
+                      <TextField
+                        label="Enter Minimum Price(in rs. from 20L to 50cr"
+                        type="text"
+                        value={minPrice}
+                        onChange={(e) => handlePriceChange(e, true)}
+                        className="w-full"
+                      />
+                      <TextField
+                        label="Max Price"
+                        type="text"
+                        value={maxPrice}
+                        onChange={(e) => handlePriceChange(e, false)}
+                        className="w-full"
+                      />
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-black p-2 font-[latto]">
-                        ₹{formattedAmountMax}
-                      </span>
-                    </div>
+                    {priceError && <p className="text-red-500">{priceError}</p>}
                   </div>
                 </div>
-                <div className="w-full flex items-center justify-center">
-                  <div className="flex text-center font-bold font-[latto] text-black">
-                    ₹15L
-                  </div>
-                  <div className="w-full flex items-center px-2 mx-1">
-                    <Slider
-                      className="w-full"
-                      color="black"
-                      value={value}
-                      onChange={handleSliderChange}
-                      valueLabelDisplay="auto"
-                      min={1500000}
-                      max={100000000}
-                      step={calculateStep(value[1])}
-                      disableSwap
-                    />
-                  </div>
-                  <div className="flex text-center font-bold font-[latto] text-black">
-                    ₹10Cr
-                  </div>
+                <div>
+                  <Autocomplete
+                    id="area-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={AreaData}
+                    getOptionLabel={(option) => option.area}
+                    sx={{ width: "50%", background: "White" }}
+                    value={filterForm.area ? { area: filterForm.area } : { area: "" }}
+                    onInputChange={(event, newInputValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        area: newInputValue,
+                      }));
+                    }}
+                    onChange={(event, newValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        area: newValue ? newValue.area : "",
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Area" />
+                    )}
+                  />
+
+                  <Autocomplete
+                    id="year-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={Year}
+                    getOptionLabel={(option) => option.year.toString()}
+                    sx={{ width: "40%", background: "White" }}
+                    value={filterForm.year ? { year: filterForm.year } : { year: "" }}
+                    onInputChange={(event, newInputValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        year: newInputValue,
+                      }));
+                    }}
+                    onChange={(event, newValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        year: newValue ? newValue.year : "",
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Select the car Year" />
+                    )}
+                  />
                 </div>
-              </div>
-              <div>
-                <Autocomplete
-                  id="area-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={AreaData}
-                  getOptionLabel={(option) => option.area}
-                  sx={{ width: "100%", background: "White" }}
-                  value={
-                    filterForm.area ? { area: filterForm.area } : { area: "" }
-                  }
-                  onInputChange={(event, newInputValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      area: newInputValue,
-                    }));
-                  }}
-                  onChange={(event, newValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      area: newValue ? newValue.area : "",
-                    }));
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Area" />
-                  )}
-                />
+                <div>
+                  <Autocomplete
+                    id="brand-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={brands}
+                    getOptionLabel={(option) => option}
+                    sx={{ width: "50%", background: "White" }}
+                    value={filterForm.brand}
+                    onChange={handleBrandChange}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Enter the Car-Brand" />
+                    )}
+                  />
 
-                <Autocomplete
-                  id="year-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={Year}
-                  getOptionLabel={(option) => option.year.toString()}
-                  sx={{ width: "Full", background: "White" }}
-                  value={
-                    filterForm.year ? { year: filterForm.year } : { year: "" }
-                  } // Bind to state
-                  onInputChange={(event, newInputValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      year: newInputValue,
-                    }));
-                  }}
-                  onChange={(event, newValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      year: newValue ? newValue.year : "",
-                    }));
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Year" />
-                  )}
-                />
-              </div>
-              <div>
-                <Autocomplete
-                  id="brand-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={brands}
-                  getOptionLabel={(option) => option}
-                  sx={{ width: "Full", background: "White" }}
-                  value={filterForm.brand}
-                  onChange={handleBrandChange}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Brands" />
-                  )}
-                />
+                  <Autocomplete
+                    id="model-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={modelOptions}
+                    getOptionLabel={(option) => option}
+                    sx={{ width: "45%", background: "White" }}
+                    value={filterForm.model}
+                    onChange={handleModelChange}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Enter the Car-Model" />
+                    )}
+                  />
+                </div>
+                <div>
+                  <Autocomplete
+                    id="fueltype-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={FuelType}
+                    getOptionLabel={(option) => option.fuelType}
+                    sx={{ width: "40%", background: "White" }}
+                    value={filterForm.fuelType ? { fuelType: filterForm.fuelType } : { fuelType: "" }}
+                    onInputChange={(event, newInputValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        fuelType: newInputValue,
+                      }));
+                    }}
+                    onChange={(event, newValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        fuelType: newValue ? newValue.fuelType : "",
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Select a Fuel Type" />
+                    )}
+                  />
 
-                <Autocomplete
-                  id="model-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={modelOptions}
-                  getOptionLabel={(option) => option}
-                  sx={{ width: "Full", background: "White" }}
-                  value={filterForm.model}
-                  onChange={handleModelChange}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Models" />
-                  )}
-                />
-              </div>
-              <div>
-                <Autocomplete
-                  id="fueltype-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={FuleType}
-                  getOptionLabel={(option) => option.fuelType}
-                  sx={{ width: "Full", background: "White" }}
-                  value={
-                    filterForm.fuelType
-                      ? { fuelType: filterForm.fuelType }
-                      : { fuelType: "" }
-                  } // Bind to state
-                  onInputChange={(event, newInputValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      fuelType: newInputValue,
-                    }));
-                  }}
-                  onChange={(event, newValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      fuelType: newValue ? newValue.fuelType : "",
-                    }));
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Fuel Type" />
-                  )}
-                />
+                  <Autocomplete
+                    id="transmission-autocomplete"
+                    className="my-1"
+                    freeSolo
+                    options={Transmission}
+                    getOptionLabel={(option) => option.transmission}
+                    sx={{ width: "50%", background: "White" }}
+                    value={filterForm.transmission ? { transmission: filterForm.transmission } : { transmission: "" }}
+                    onInputChange={(event, newInputValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        transmission: newInputValue,
+                      }));
+                    }}
+                    onChange={(event, newValue) => {
+                      setFilterForm((prevForm) => ({
+                        ...prevForm,
+                        transmission: newValue ? newValue.transmission : "",
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Select the Transmissionof a car" />
+                    )}
+                  />
+                </div>
+                <div className="flex gap-2 md:flex-col lg:flex">
+                  <Button type="submit" className="bg-green-500 text-white text-sm">
+                    Search
+                  </Button>
+                  <Button onClick={resetForm} className="bg-red-500 text-white text-sm">
+                    Reset
+                  </Button>
+               </div>
+               </form>
+               </div>
+          </Card>
 
-                <Autocomplete
-                  id="transmission-autocomplete"
-                  className="my-1"
-                  freeSolo
-                  options={Transmission}
-                  getOptionLabel={(option) => option.transmission}
-                  sx={{ width: "Full", background: "White" }}
-                  value={
-                    filterForm.transmission
-                      ? { transmission: filterForm.transmission }
-                      : { transmission: "" }
-                  } // Bind to state
-                  onInputChange={(event, newInputValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      transmission: newInputValue,
-                    }));
-                  }}
-                  onChange={(event, newValue) => {
-                    setFilterForm((prevForm) => ({
-                      ...prevForm,
-                      transmission: newValue ? newValue.transmission : "",
-                    }));
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Transmission" />
-                  )}
-                />
-              </div>
-              <div className="flex gap-5 md:flex-col lg:flex">
-                <Button type="submit" className="bg-indigo-400">
-                  Search
-                </Button>
-                <Button onClick={resetForm} className="bg-indigo-400">
-                  Reset
-                </Button>
-              </div>
-            </div>
-          </form>
         </div>
-      </Card>
+      )} 
     </div>
   );
+};
+
+FilterPremiumCars1.propTypes = {
+  setUrlState: PropTypes.func.isRequired, // Add prop validation
 };
 
 export default FilterPremiumCars1;
