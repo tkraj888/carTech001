@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
+
+.-ml-1, .ml-1{
+    color: black
+}
+/* 
+.carousel-height{
+    height: 70vh !important;
+}
+
+@media screen and (min-width: 320px) {
+    .carousel-height{
+      height: 30vh !important;
+    }
+}
+
+@media screen and (min-width: 715px) and (max-device-width: 1599px) {
+    .carousel-height{
+      height: 43vh !important;
+    }
+} */
+
+@media screen and (min-width: 1200px) and (max-device-width: 2000px) {
+    .carousel-height{
+      height: 460px !important;
+    }
+  }
+
+/* @media screen and (min-width: 1700px) and (max-device-width: 2000px) {
+  .carousel-height{
+    height: 50vh !important;
+  }
+} */
