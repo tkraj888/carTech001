@@ -203,9 +203,7 @@ const FilterCars = ({ setUrlState }) => {
     } 
     else {
       const min = parseInt(minPrice.replace(/,/g, ""));
-      if (parseInt(numericValue) === min) {
-        setPriceError("Not a price range, fixed amount");
-      } else if (parseInt(numericValue) > 2000000) {
+       if (parseInt(numericValue) > 2000000) {
         setPriceError("For high-budget cars, go to 'Premium Cars' section.");
       } else {
         setPriceError("");

@@ -50,7 +50,7 @@ EditField.propTypes = {
   icon: PropTypes.element.isRequired,
 };
 
-const EditProfile = () => { // Component name is EditProfile
+const EditProfile = () => { 
   const { userProfileId } = useParams();
   const navigate = useNavigate();
 
@@ -223,4 +223,4 @@ const EditProfile = () => { // Component name is EditProfile
   );
 };
 
-export default EditProfile; // Correct export
+export default EditProfile; 
