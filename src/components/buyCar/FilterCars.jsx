@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-vars */
+
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
 import { Card } from "@material-tailwind/react";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaFilter } from "react-icons/fa";
-import Slider from "@mui/material/Slider";
+import PropTypes from "prop-types";
+
+FilterCars.propTypes = {
+  setUrlState: PropTypes.func.isRequired,
+};
+
 import {
     Autocomplete,
     Checkbox,
@@ -421,10 +426,6 @@ const FilterCars = ({ setUrlState }) => {
       )} 
     </div>
   );
-};
-
-FilterCars.propTypes = {
-  setUrlState: PropTypes.func.isRequired, // Add prop validation
 };
 
 export default FilterCars;

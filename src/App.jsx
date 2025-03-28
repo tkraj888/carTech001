@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Router } from "react-router-dom";
 import { FavoriteProvider } from "./ui/FavoriteContext";
 import Home from "./pages/Home";

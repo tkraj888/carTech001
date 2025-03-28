@@ -78,7 +78,7 @@ const EditProfile = () => { // Component name is EditProfile
         firstName: data.firstName || "",
         lastName: data.lastName || "",
         email: data.email || "",
-        mobileNo: data.mobile_no || "",
+        mobileNo: data.mobile_no || ""
       });
     }
   }, [data]);

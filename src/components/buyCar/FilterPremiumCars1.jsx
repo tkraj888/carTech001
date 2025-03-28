@@ -10,7 +10,8 @@ import {
   Autocomplete,
   TextField,
 } from "@mui/material";
-import PropTypes from "prop-types"; 
+import PropTypes from 'prop-types';
+
 
 const FilterPremiumCars1 = ({ setUrlState }) => {
   const { data: brandData } = useGetOnlyBrandsQuery();
@@ -398,7 +399,7 @@ const FilterPremiumCars1 = ({ setUrlState }) => {
 };
 
 FilterPremiumCars1.propTypes = {
-  setUrlState: PropTypes.func.isRequired, // Add prop validation
+  setUrlState: PropTypes.func.isRequired, // Define prop type
 };
 
 export default FilterPremiumCars1;
