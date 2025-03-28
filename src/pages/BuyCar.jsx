@@ -32,7 +32,6 @@ const BuyCar = () => {
     }
   }, [dispatch, UserId]);
 
-
   if (error?.status === 401) {
     Cookies.remove("token");
     navigate("/signin");

@@ -1,9 +1,5 @@
 {
-
-  "short_name": "AutoCarCarePoint",
-
-  "short_name1": "React App",
-
+  "short_name": "React App",
   "name": "Create React App Sample",
   "icons": [
     {

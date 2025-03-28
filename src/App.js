@@ -1,17 +1,25 @@
-import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import AppRoutes from "./AppRoutes";
+import logo from './logo.svg';
+import './App.css';
+
 function App() {
-    return (_jsx(_Fragment, { children: _jsx(AppRoutes, {}) }));
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
-
-
-
-const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
-const API_URL = "https://carauto01-production-8b0b.up.railway.app/favorites";
-
-fetch(PROXY_URL + API_URL)
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Error:", error));
 
 export default App;

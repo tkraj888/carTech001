@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(_jsx(React.StrictMode, { children: _jsx(BrowserRouter, { children: _jsx(App, {}) }) }));
-const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
-const API_URL = "https://carauto01-production-8b0b.up.railway.app/favorites";
+import reportWebVitals from './reportWebVitals';
 
-fetch(PROXY_URL + API_URL)
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Error:", error));
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
