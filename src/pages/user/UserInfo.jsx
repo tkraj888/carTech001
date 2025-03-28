@@ -27,7 +27,8 @@ const UserInfo = () => {
   if (token) {
     jwtDecodes = jwtDecode(token);
   }
-  const userProfileId = token ? jwtDecodes?.userProfileId : null;
+  const userProfileId = token ? jwtDecodes?.userProfileId : null; // Check if userProfileId is defined
+console.log("User Profile ID:", userProfileId); // Log the userProfileId for debugging
   const userId = token ? jwtDecodes?.userId : null;
 
   const { data } = useGetUserByIdQuery(userProfileId);
