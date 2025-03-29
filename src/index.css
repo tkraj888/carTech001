@@ -14,34 +14,24 @@
     .no-scrollbar {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
-  }
+    }
 }
 
 .-ml-1, .ml-1{
-    color: black
+    color: black;
 }
+
 /* 
 .carousel-height{
     height: 70vh !important;
 }
-
-@media screen and (min-width: 320px) {
-    .carousel-height{
-      height: 30vh !important;
-    }
-}
-
-@media screen and (min-width: 715px) and (max-device-width: 1599px) {
-    .carousel-height{
-      height: 43vh !important;
-    }
-} */
+*/
 
 @media screen and (min-width: 1200px) and (max-device-width: 2000px) {
     .carousel-height{
       height: 460px !important;
     }
-  }
+}
 
 /* @media screen and (min-width: 1700px) and (max-device-width: 2000px) {
   .carousel-height{
